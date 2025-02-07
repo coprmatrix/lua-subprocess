@@ -1,0 +1,25 @@
+<services>
+    <service name="obs_scm">
+        <param name="filename">subprocess</param>
+        <param name="url">https://github.com/huakim/lua-subprocess</param>
+        <param name="scm">git</param>
+        <param name="revision">master</param>
+        <param name="versionformat">@PARENT_TAG@</param>
+        <param name="extract">generate_spec.py</param>
+        <param name="without-version">enable</param>
+    </service>
+    <service name="run" mode="buildtime">
+        <param name="command">
+`cat subprocess.obsinfo | sed 's/: /=/g;s/^/declare /g'`
+LUA_SUBPROCESS_VERSION="$version"-1 python3 generate_spec.py
+        </param>
+  </service>
+    <service name="tar" mode="buildtime" />
+    <service name="recompress" mode="buildtime">
+        <param name="file">*.tar</param>    
+        <param name="compression">gz</param>
+    </service>
+    <service name="lua2pack_generate" mode="buildtime">
+        <param name="noop">enable</param>
+    </service>
+</services>
